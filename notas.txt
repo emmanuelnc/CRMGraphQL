@@ -1,0 +1,29 @@
+ Query, mutation ,resolver, shema
+
+       Query, crud, leer registros -- READ, select SQL o GET rest API  --'R' del crud
+       query {product{ID}} 
+
+         Mutation - Actualizar, eliminar y crear C_UD, put patch, delete o post
+         mutation eliminaProducto($id : ID {eliminaProducto(id: $id)}
+        
+         Schema
+            describe tipos de objetos, querys y datos de la aplicacion
+            type Cliente{
+                id: ID
+                nombre: String
+                apellido: String
+}
+
+            Resolver, comunicacion
+            funciones responasbles de regresar valores definidos es Schema
+            este consulta y obtiene resultado
+
+            obtenerclientes: async () => {
+                const clientes = await clientes.find({});
+                return clientes
+            }
+
+schema y resolver
+type Query {
+    obtenerCliente (id: ID): Cliente
+}
