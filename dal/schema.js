@@ -4,52 +4,31 @@ const { gql } = require ('apollo-server');
 //schema, type definition -- Minimo
 const typeDefs = gql`
 
-    type Curso {
-        titulo: String
+  type Usuario {
+    id : ID
+    nombre : String
+    apellido : String
+    email : String
+    creado : String
+  }
+
+  input UsuarioInput {
+    nombre : String!
+    apellido : String!
+    email : String!
+    password : String!
+    
+  }
+
+
+type Query
+    {
+      obtenerCurso : String
     }
 
-
-    input CursoInput{
-        tecnologia: String
-    }
-  
-
-    type Query {
-        obtenerCursos(input : CursoInput!) : [Curso]
-    
-    
+ type Mutation{
+      nuevoUsuario(input: UsuarioInput) : Usuario
     }
 `;
-
-// input parametro ! obligatorio
-/*
-query con input
-        {
-        obtenerCursos( input:{tecnologia: "Node.js"}) {
-            titulo
-        }
-        }
-
-
-query con  variables, se distingue por el $
-
-
-query obtenerCursos($input: CursoInput!){
-  obtenerCursos( input:$input) {
-    titulo
-  }
-}
-
-y la variable se pasa por panel query variables
-{
-  "input": {
-    "tecnologia": "React"
-  }
-}
-
-
-*/
-
-
 
 module.exports = typeDefs;
