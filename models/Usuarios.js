@@ -30,3 +30,5 @@ const UsuariosSchema = mongoose.Schema({
     }
 });
 
+module.exports  = mongoose.model('Usuario',UsuariosSchema);
+
