@@ -1,0 +1,21 @@
+================================
+Alta de usuarios
+mutation nuevoUsuario($input: UsuarioInput) {
+  nuevoUsuario(input: $input){
+    id
+    nombre
+    apellido
+    email
+	}
+}
+
+variables
+{
+  "input":{
+    "nombre" : "Emmanuel",
+    "apellido" : "Nuno",
+    "email" : "jose@nuno.com",
+    "password" : "MyEncPassword"
+  }
+}
+=============================
