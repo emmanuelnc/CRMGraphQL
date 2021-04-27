@@ -1,7 +1,7 @@
 const { gql } = require ('apollo-server');
 
 
-//schema, type definition -- Minimo
+//schema, type definition -- Minimo, ok
 const typeDefs = gql`
 
   type Token {
