@@ -116,6 +116,66 @@ const resolvers = {
                                 return foundpedido;
                         
                 
+                },
+                obtenerPedidosEstado: async(_,{estado},ctx) => {
+                        const pedidos = await Pedido.find({ vendedor : ctx.usuario.id, estado});
+                        return pedidos;
+
+                },
+                mejoresClientes: async () => {
+                        
+                        const clientes = await Pedido.aggregate([
+                                { $match : {estado : "COMPLETADO"}},
+                                { $group : {
+                                        _id : "$cliente",
+                                        total: { $sum : '$total'}
+                                }},
+                                {
+                                        $lookup : {
+                                                from : 'clientes',
+                                                localField: '_id',
+                                                foreignField: '_id',
+                                                as: 'cliente'
+                                        }
+                                },
+                                {
+                                        $sort : {
+                                         total: -1       
+                                        }
+                                }
+
+                        ]);
+                        return clientes;
+                },
+                mejoresVendedores: async ()=>{
+                        const vendedores = await Pedido.aggregate([
+                                {$match : {estado:"COMPLETADO"}},
+                                {$group : {
+                                        _id : "$vendedor",
+                                        total: {$sum : '$total'}
+                                        }
+                                },
+                                {
+                                        $lookup:{
+                                                from : 'usuarios',
+                                                localField : '_id',
+                                                foreignField: '_id',
+                                                as: 'vendedor'
+                                        }
+                                },
+                                {
+                                        $limit:3
+                                },
+                                {
+                                        $sort : {total: -1 }
+                                }
+                                 ])
+                                 return vendedores;
+
+                },
+                buscarProducto : async (_,{texto}) => {
+                        const productos = await Producto.find({$text : {$search:texto} }).limit(5) ;
+                        return productos;
                 }
 
         },
@@ -333,7 +393,7 @@ const resolvers = {
                                 throw new Error(`El Pedido no existe`);
                         }
 
-console.log("cte",input);
+
                         //verificar si existe cliente
                         const existecliente = await Cliente.findById(input.cliente);
                         
@@ -366,6 +426,19 @@ console.log("cte",input);
                         //guardar
                         const resultado = await Pedido.findOneAndUpdate({_id : id}, input,{new:true});
                         return resultado;
+                },
+                eliminarPedido: async(_,{id},ctx) => {
+                          //verificar si existe pedido
+                          const existepedido = await Pedido.findById(id);
+                        
+                          if (!existepedido){
+                                  throw new Error(`El Pedido no existe`);
+                          }
+                          if(existepedido.vendedor.toString() !== ctx.usuario.id){
+                                throw new Error(`No tienes autorizacion para eliminar este pedido`);
+                          }
+                        await Pedido.findOneAndDelete({ _id: id });
+                        return "Pedido eliminado";
                 }
 
 

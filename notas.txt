@@ -27,3 +27,30 @@ schema y resolver
 type Query {
     obtenerCliente (id: ID): Cliente
 }
+
+
+
+en este query
+  const clientes = await Pedido.aggregate([
+                                { $match : {estado : "COMPLETADO"}},
+                                { $group : {
+                                        _id : "$cliente",
+                                        total: { $sum : '$total'}
+                                }},
+                                {
+                                        $lookup : {
+                                                from : 'clientes',
+                                                localField: '_id',
+                                                foreignField: '_id',
+                                                as: 'cliente'
+                                        }
+                                },
+                                {
+                                        $sort : {
+                                         total: -1       
+                                        }
+                                }
+
+                        ]);
+
+los simbolos de $ son funciones de mongo, en el caso de $lookup es similar a un join del SQL, 'en mongosse es populate'

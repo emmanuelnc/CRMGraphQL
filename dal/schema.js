@@ -42,6 +42,15 @@ const typeDefs = gql`
     cantidad: Int
   }
 
+  type TopCliente{
+    total  : Float
+    cliente : [Cliente]
+  }
+
+  type TopVendedor{
+    total  : Float
+    vendedor : [Usuario]
+  }
 
   type Usuario {
     id : ID
@@ -116,7 +125,14 @@ type Query
     obtenerPedidos: [Pedido]
     obtenerPedidosvendedor: [Pedido]
     obtenerPedido(id:ID!) : Pedido
+    obtenerPedidosEstado(estado: String!) : [Pedido]
     
+    #Busquedas Avanzadas
+    mejoresClientes : [TopCliente]
+    mejoresVendedores : [TopVendedor]
+    buscarProducto(texto: String!) : [Producto]
+
+
       
     }
 
@@ -139,6 +155,8 @@ type Query
     #Pedidos
     nuevoPedido(input : PedidoInput) : Pedido
     actualizarPedido(id:ID!, input: PedidoInput) : Pedido
+    eliminarPedido(id: ID!) : String
+
 
     }
 `;
