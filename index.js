@@ -39,21 +39,26 @@ const server = new ApolloServer({
     context: ({ req }) => {
         //console.log(req.headers['authorization'])
 
+       // console.log(req.headers);
+
         const token = req.headers['authorization'] || '';
 
         if (token) {
             try {
                 const usuario =  jwt.verify(token, process.env.SECRET);
-             //   console.log("usuario:",  usuario);
+                //console.log("usuario:",  usuario);
 
                 return {
                     usuario
                 }
 
             } catch (err) {
-                console.log("Hubo un error al verificar token");
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+                console.log("Hubo un error al verificar token " + time);
                 //console.lo(err);
-                console.log(req.url.toString())
+               // console.log(req.url.toString())
             }
         }
 
